@@ -3,8 +3,11 @@ import mongoose from 'mongoose';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import taskRoutes from './routes/taskRoutes';
+import router from './routes/userRoute';
 
-dotenv.config();
+dotenv.config()
+
+console.log('dotenv.config()', dotenv.config())
 
 const app = express();
 
@@ -14,12 +17,13 @@ app.use(express.json());
 
 // MongoDB connection
 mongoose
-  .connect(process.env.DB_URI as string)
+  .connect(process.env.DB_URI || '')
   .then(() => console.log('MongoDB connected'))
   .catch((err) => console.error('MongoDB connection error:', err));
 
 // Route registration
 app.use('/api', taskRoutes);
+app.use('/user', router)
 
 // Root route
 app.get('/', (req, res) => {
